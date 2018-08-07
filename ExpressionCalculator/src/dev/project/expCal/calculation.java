@@ -111,23 +111,33 @@ public class calculation {
 	public double bodmas_calculate() {
 		double result = 0.00;
 		String number = "";
+		char[] exp = expression.toCharArray();
 		LinkedList<Character> operator = new LinkedList<Character>();
 		LinkedList<Double> list = new LinkedList<Double>();
-		for (char ch : expression.toCharArray()) {
-			System.out.println("Number   List --> " + list);
+// Debuging		
+//		list.push(2.00);
+//		list.push(3.00);
+//		list.push(5.00);
+//		System.out.println(list);
+		
+		for (int i = 0; i < exp.length; i++) {
+			System.out.println(exp[i] + " <-index-> " + i + "\nNumber   List --> " + list);
 			System.out.println("Operator List --> " + operator);
-			while(ch == ' ');
+			while(exp[i] == ' ');
 			
-			if(ch == '-' && (number.isEmpty())) {
-				number += ch;
-			}else if (ch >= '0' && ch <= '9') {
-				while(ch >= '0' && ch <= '9')
-					number += ch;
+			if(exp[i] == '-' && number.isEmpty() && (exp[i-1] >= '0' && exp[i-1] <= '9')) {
+				number += exp[i];
+			}else if (exp[i] >= '0' && exp[i] <= '9') {				
+				while(exp[i] >= '0' && exp[i] <= '9') {
+					number += exp[i++];
+				}				
 				list.push(Double.parseDouble(number));
-			}else if(ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '%') {
-				while(!operator.isEmpty() && hasPrecedence(ch, operator.peek()))
+				number = "";
+			}else if(exp[i] == '+' || exp[i] == '-' || exp[i] == '*' || exp[i] == '/' || exp[i] == '%') {
+				System.out.println(exp[i]);
+				while(!operator.isEmpty() && hasPrecedence(exp[i], operator.peek()))
 					list.push(calculate(list.pop(), list.pop(), operator.pop()));
-				operator.push(ch);
+				operator.push(exp[i]);
 			}
 		}
 		while (!operator.isEmpty()) {
