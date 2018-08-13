@@ -17,16 +17,17 @@ public class clientDriver {
 		try {
 			socket = new Socket(address,port);
 			System.out.println("# Socket Created...");
-			inputData();
+			in = new DataInputStream(System.in);
 			out = new DataOutputStream(socket.getOutputStream());
+			displayData();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		closeConnection();
 	}
 	
-	private void inputData() {
-		messageSent = "Hello Server";
+	private void displayData() {
+		
 	}
 	
 	private void closeConnection() {
