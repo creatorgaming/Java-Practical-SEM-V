@@ -11,7 +11,9 @@ import java.util.Scanner;
 public class clientDriver {
 
 	private Socket socket = null;
-	private String messageSent = "dev.project.rmi.server.testClass/add/2/3";
+	// Message Syntax  : ClassName/FunctionName/NoOfArguments/DataType_1/Arg_1/...
+	// Default Message : dev.project.rmi.server.testClass/add/2/int/2/int/10
+	private String messageSent = null;
 	private DataOutputStream out = null;
 	private DataInputStream in = null;
 	
@@ -38,9 +40,8 @@ public class clientDriver {
 			Scanner input = new Scanner(System.in);
 			System.out.print("# Client : Enter the message : ");
 			messageSent = input.next();
-			System.out.println("");
 			out.writeUTF(messageSent);
-			System.out.println("# Server : " + in.readUTF());
+			System.out.println("# Server : " + in.read());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
