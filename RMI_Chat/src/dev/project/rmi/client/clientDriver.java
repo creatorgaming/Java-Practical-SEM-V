@@ -38,10 +38,13 @@ public class clientDriver {
 		try {
 			@SuppressWarnings("resource")
 			Scanner input = new Scanner(System.in);
-			System.out.print("# Client : Enter the message : ");
-			messageSent = input.next();
-			out.writeUTF(messageSent);
-			System.out.println("# Server : " + in.read());
+			do {
+				System.out.print("# Client : Enter the message : ");
+				messageSent = input.next();
+				out.writeUTF(messageSent);
+				System.out.println("# Server : " + in.readUTF());
+			}while( !(messageSent.equalsIgnoreCase("exit")) );
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

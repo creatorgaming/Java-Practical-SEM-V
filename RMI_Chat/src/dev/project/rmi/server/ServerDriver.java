@@ -85,47 +85,32 @@ public class ServerDriver {
 		for (String string : dataTypes) {	
 			switch (string) {
 			case "int":
-				params[paramsIndex++] = int.class;
-				args[paramsIndex++] = Integer.parseInt(dataValues.get(paramsIndex));
+				params[paramsIndex] = int.class;
+				args[paramsIndex] = Integer.parseInt(dataValues.get(paramsIndex));
+				paramsIndex++;
 				break;
 
 			case "float":
-				params[paramsIndex++] = float.class;
+				params[paramsIndex] = float.class;
+				args[paramsIndex] = Float.parseFloat(dataValues.get(paramsIndex));
+				paramsIndex++;
 				break;
 
 			case "double":
-				params[paramsIndex++] = double.class;
+				params[paramsIndex] = double.class;
+				args[paramsIndex] = Double.parseDouble(dataValues.get(paramsIndex));
+				paramsIndex++;
 				break;
 				
 			case "char":
-				params[paramsIndex++] = char.class;
+				params[paramsIndex] = char.class;
+				args[paramsIndex] = dataValues.get(paramsIndex);
+				paramsIndex++;
 				break;
 
 			default:
 				errorDisplay();
 				break;
-			}
-		}
-	}
-	
-	private void extractArgs() {
-		for (String dataType : dataValues) {
-			switch (dataValues) {
-				case "":
-				
-					break;
-				case "":
-					
-					break;
-				case "":
-					
-					break;
-				case "":
-					
-					break;
-
-				default:
-					break;
 			}
 		}
 	}
@@ -142,14 +127,17 @@ public class ServerDriver {
 			params = new Class<?>[noOfArgs];
 			args = new Object[noOfArgs];
 			extractParams();
-			extractArgs();
-			@SuppressWarnings("unused")
 			Object object = cls.newInstance();
 			Method method = cls.getDeclaredMethod(methodName,params);
-			System.out.println(method.toGenericString());
+			System.out.println(method.toGenericString() + "\nArgs : ");
+			for (Object object2 : args) {
+				System.out.print(object2 + " , ");	
+			}
 			output.writeUTF("Your result is " + method.invoke(object, args));
 		} catch (Exception e) {
-			e.printStackTrace();
+			output.writeUTF("!! NO SUCH METHOD FOUND !!");
+			closeConnection();
+			System.exit(1);
 		}
 	}
 	
