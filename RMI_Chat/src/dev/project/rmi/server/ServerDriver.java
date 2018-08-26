@@ -39,7 +39,7 @@ public class ServerDriver {
 	private ArrayList<String> dataTypes = new ArrayList<String>();
 	private ArrayList<String> dataValues = new ArrayList<String>();
 	
-	public ServerDriver(int port) {
+	public ServerDriver(int port) throws IOException {
 		try {
 			
 			server = new ServerSocket(port);
@@ -54,15 +54,17 @@ public class ServerDriver {
 			
 			mainControl();
 		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		closeConnection();
+				errorDisplay();
+		}		
+//		closeConnection();
 	}
 	
 	private void mainControl() {
 		try {
 			messageReceived = input.readUTF();
+			if(messageReceived.equalsIgnoreCase("exit")) {
+				closeConnection();
+			}
 			classRetriver(messageReceived);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -142,7 +144,7 @@ public class ServerDriver {
 	}
 	
 	private void errorDisplay() throws IOException {
-		output.writeUTF("!! WRONG INPUT !!");
+		output.writeUTF("!! WRONG INPUT !! Closing Connection ....");
 		closeConnection();
 		System.exit(1);
 	}

@@ -26,12 +26,11 @@ public class clientDriver {
 			out = new DataOutputStream(socket.getOutputStream());
 			
 			System.out.println("# Client : Connection Created...");
-			
+			System.out.println("# Client : Type 'exit' to close connection...");
 			mainControl();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		closeConnection();
 	}
 	
 	private void mainControl() {
@@ -41,7 +40,11 @@ public class clientDriver {
 			do {
 				System.out.print("# Client : Enter the message : ");
 				messageSent = input.next();
+				if(messageSent.equalsIgnoreCase("exit")) {
+					closeConnection();
+				}
 				out.writeUTF(messageSent);
+				messageSent = "";
 				System.out.println("# Server : " + in.readUTF());
 			}while( !(messageSent.equalsIgnoreCase("exit")) );
 			
@@ -55,6 +58,7 @@ public class clientDriver {
 			in.close();
 			out.close();
 			socket.close();
+			System.exit(1);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
