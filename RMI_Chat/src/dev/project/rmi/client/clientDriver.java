@@ -42,10 +42,15 @@ public class clientDriver {
 				messageSent = input.next();
 				if(messageSent.equalsIgnoreCase("exit")) {
 					closeConnection();
-				}
+				}			
 				out.writeUTF(messageSent);
 				messageSent = "";
-				System.out.println("# Server : " + in.readUTF());
+				String messageReceived = in.readUTF();				
+				System.out.println("# Server : " + messageReceived);
+				if (messageReceived.startsWith("!!")) {
+					System.out.println("# Client : Connection Closed...");
+					closeConnection();
+				}
 			}while( !(messageSent.equalsIgnoreCase("exit")) );
 			
 		} catch (IOException e) {

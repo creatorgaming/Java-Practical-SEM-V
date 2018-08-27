@@ -1,6 +1,5 @@
 package dev.project.rmi.server;
 
-import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -28,7 +27,7 @@ public class ServerDriver {
 	private DataInputStream input = null;
 	private DataOutputStream output = null;
 	
-	private String messageReceived = null;
+	private String messageReceived = "";
 	private String className = null;
 	private String methodName = null;
 	private String[] element = null;
@@ -39,7 +38,7 @@ public class ServerDriver {
 	private ArrayList<String> dataTypes = new ArrayList<String>();
 	private ArrayList<String> dataValues = new ArrayList<String>();
 	
-	public ServerDriver(int port) throws IOException {
+	public ServerDriver(int port) {
 		try {
 			
 			server = new ServerSocket(port);
@@ -49,25 +48,25 @@ public class ServerDriver {
 			socket = server.accept();
 			System.out.println("# Connection established ... ");
 			
-			input = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
+			input = new DataInputStream(socket.getInputStream());
 			output = new DataOutputStream(socket.getOutputStream());
 			
 			mainControl();
 		} catch (IOException e) {
-				errorDisplay();
+			errorDisplay("!! Socket Creation Error !!");
 		}		
 //		closeConnection();
 	}
 	
 	private void mainControl() {
 		try {
-			messageReceived = input.readUTF();
-			if(messageReceived.equalsIgnoreCase("exit")) {
-				closeConnection();
+			while(!messageReceived.equalsIgnoreCase("exit")) {
+				messageReceived = input.readUTF();
+				classRetriver(messageReceived);
 			}
-			classRetriver(messageReceived);
+			closeConnection();
 		} catch (IOException e) {
-			e.printStackTrace();
+			errorDisplay("!! Message Not read Properly, Send Message Again...");
 		}
 	}
 	
@@ -79,7 +78,7 @@ public class ServerDriver {
 			checkArgsBit++;
 		}
 		if(checkArgsBit != noOfArgs)
-			errorDisplay();
+			errorDisplay("!! Incorrect Input : Function Signature incorect");
 	}
 	
 	private void extractParams() throws IOException {
@@ -111,7 +110,7 @@ public class ServerDriver {
 				break;
 
 			default:
-				errorDisplay();
+				errorDisplay("!! Incorrect Input : Wrong Data Type, Wrong Data Value !!");
 				break;
 			}
 		}
@@ -137,14 +136,18 @@ public class ServerDriver {
 			}
 			output.writeUTF("Your result is " + method.invoke(object, args));
 		} catch (Exception e) {
-			output.writeUTF("!! NO SUCH METHOD FOUND !!");
+			errorDisplay("!! NO SUCH METHOD FOUND !!");
 			closeConnection();
 			System.exit(1);
 		}
 	}
 	
-	private void errorDisplay() throws IOException {
-		output.writeUTF("!! WRONG INPUT !! Closing Connection ....");
+	private void errorDisplay(String errorMessage) {
+		try {
+			output.writeUTF(errorMessage);
+		} catch (IOException e) {
+			System.out.println("!! ERROR IN SENDING MESSAGE !!");
+		}
 		closeConnection();
 		System.exit(1);
 	}
@@ -155,7 +158,7 @@ public class ServerDriver {
 			socket.close();
 			input.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			errorDisplay("!! Error : Connection Not Closed Properly !!");
 		}
 	}
 }
