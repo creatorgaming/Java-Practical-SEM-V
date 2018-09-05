@@ -31,18 +31,19 @@ public class clientDriver {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		closeConnection();
 	}
 	
 	private void mainControl() {
 		try {
 			@SuppressWarnings("resource")
 			Scanner input = new Scanner(System.in);
-			do {
+//			do {
 				System.out.print("# Client : Enter the message : ");
 				messageSent = input.next();
-				if(messageSent.equalsIgnoreCase("exit")) {
-					closeConnection();
-				}			
+//				if(messageSent.equalsIgnoreCase("exit")) {
+//					closeConnection();
+//				}			
 				out.writeUTF(messageSent);
 				messageSent = "";
 				String messageReceived = in.readUTF();				
@@ -51,7 +52,7 @@ public class clientDriver {
 					System.out.println("# Client : Connection Closed...");
 					closeConnection();
 				}
-			}while( !(messageSent.equalsIgnoreCase("exit")) );
+//			}while( !(messageSent.equalsIgnoreCase("exit")) );
 			
 		} catch (IOException e) {
 			e.printStackTrace();

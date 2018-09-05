@@ -55,15 +55,15 @@ public class ServerDriver {
 		} catch (IOException e) {
 			errorDisplay("!! Socket Creation Error !!");
 		}		
-//		closeConnection();
+		closeConnection();
 	}
 	
 	private void mainControl() {
 		try {
-			while(!messageReceived.equalsIgnoreCase("exit")) {
+//			while(!messageReceived.equalsIgnoreCase("exit")) {
 				messageReceived = input.readUTF();
 				classRetriver(messageReceived);
-			}
+//			}
 			closeConnection();
 		} catch (IOException e) {
 			errorDisplay("!! Message Not read Properly, Send Message Again...");
