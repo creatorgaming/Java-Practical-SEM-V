@@ -36,11 +36,11 @@ public class Menu {
 		System.out.println("\t\t---------------");
 		System.out.println("\t\t|||| ADMIN ||||");
 		System.out.println("\t\t---------------");
-		System.out.print("\n\tEnter password : ");
+		System.out.print("\n\t      Enter password : ");
 		String pass = inp.next();
 		if (!pass.equals(password)) {
-			System.out.println("!!!! Invalid Password !!!!");
-			System.exit(1);
+			System.out.println("\t  !!!! Invalid Password !!!!");
+			adminMenu();
 		}
 		
 		new Admin();
