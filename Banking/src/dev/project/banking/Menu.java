@@ -1,6 +1,7 @@
 package dev.project.banking;
 
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 import dev.project.bankingOperation.*;
@@ -9,7 +10,7 @@ public class Menu {
 	
 	static final String password = "1234";
 	
-	public Menu(String person) {
+	public Menu(String person) throws SQLException {
 		if (person.equalsIgnoreCase("user")) {
 			userMenu();
 		}else if (person.equalsIgnoreCase("admin")) {
@@ -18,19 +19,19 @@ public class Menu {
 	}
 	
 	@SuppressWarnings("resource")
-	private void userMenu() {
+	private void userMenu() throws SQLException {
 		Scanner inp = new Scanner(System.in);
 		System.out.println("\n\n\n\n");
 		System.out.println("\t\t--------------");
 		System.out.println("\t\t|||| USER ||||");
 		System.out.println("\t\t--------------");
 		System.out.print("\n\t   Enter account number : ");
-		int accountNo = inp.nextInt();
+		String accountNo = inp.nextLine();
 		new User(accountNo);
 	}
 
 	@SuppressWarnings("resource")
-	private void adminMenu() {
+	private void adminMenu() throws SQLException {
 		Scanner inp = new Scanner(System.in);
 		System.out.println("\n\n\n");
 		System.out.println("\t\t---------------");
