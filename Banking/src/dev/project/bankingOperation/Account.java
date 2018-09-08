@@ -76,4 +76,26 @@ public class Account {
 		stt.close();
 		return confirm;		
 	}
+	
+	private Date getDate() {
+		Date date = null;
+		return date;
+	}
+	
+	public ResultSet transactionsUpdate(int amountDeposited, int amountWithdrawn) {
+		String query = null;
+		if (amountDeposited > 0) {
+			query = "INSERT INTO `transactions`(`acno`, `date`, `amountDeposited`, `balance`) "
+					+ "VALUES (?,?,?,?)";
+		}else if (amountWithdrawn > 0) {
+			query = "INSERT INTO `transactions`(`acno`, `date`, `amountWithdrawn`, `balance`) "
+					+ "VALUES (?,?,?,?)";
+		}else {
+			System.out.println("# INVALID TRANSACTION, EXITING ...");
+			System.exit(1);
+		}
+		
+		ResultSet resultSet = null;
+		return resultSet;
+	}
 }

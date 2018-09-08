@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import dev.project.banking.BankingMain;
 
 public class User {
 	
@@ -126,6 +125,7 @@ public class User {
 	private void userMenu() throws SQLException {
 		@SuppressWarnings("resource")
 		Scanner inp = new Scanner(System.in);
+		mainWhileLoop:
 		while (true) {
 			System.out.println("\n\n\n");
 			System.out.println("\t\t--------------------------------------------------");
@@ -155,8 +155,7 @@ public class User {
 				passbook();
 				break;
 			case 5:
-				new BankingMain();
-				break;
+				break mainWhileLoop;
 			case 6:
 				System.exit(1);
 				break;
