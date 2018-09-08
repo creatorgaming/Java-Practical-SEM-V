@@ -1,14 +1,63 @@
 package dev.project.bankingOperation;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class Account {
 	
 	private String accountNo = null;
 	private Connection conn = null;
+
+	public Account() {
+		conn = Connector.createConnection();
+	}
+	
 	public Account(String accountNo) {
 		this.accountNo = accountNo;
 		conn = Connector.createConnection();
+	}
+	
+	private int getBalance() throws SQLException {
+		int balance = 0;
+		String query = "SELECT `currentBalance` "
+				     + "FROM `accountholderinfo` WHERE acno = " + accountNo;
+		PreparedStatement stt = conn.prepareStatement(query);
+		ResultSet result = stt.executeQuery();
+		while (result.next()) {
+			balance = result.getInt("currentBalance");
+		}
+		stt.close();		
+		return balance;
+	}
+	
+	private void transactionsUpdate(int amountDeposited, int amountWithdrawn, int balance) throws SQLException {
+		String query = null;
+		PreparedStatement stt = null;
+		if (amountDeposited > 0) {
+			query = "INSERT INTO `transactions`(`acno`, `date`, `amountDeposited`, `balance`) "
+					+ "VALUES (?,?,?,?)";
+			stt = conn.prepareStatement(query);
+			stt.setInt(1, Integer.parseInt(accountNo));
+			stt.setDate(2, java.sql.Date.valueOf(java.time.LocalDate.now()));
+			stt.setInt(3, amountDeposited);
+			stt.setInt(4, balance);
+			
+		}else if (amountWithdrawn > 0) {
+			query = "INSERT INTO `transactions`(`acno`, `date`, `amountWithdrawn`, `balance`) "
+					+ "VALUES (?,?,?,?)";
+			stt = conn.prepareStatement(query);
+			stt.setInt(1, Integer.parseInt(accountNo));
+			stt.setDate(2, java.sql.Date.valueOf(java.time.LocalDate.now()));
+			stt.setInt(3, amountWithdrawn);
+			stt.setInt(4, balance);
+		}else {
+			System.out.println("# INVALID TRANSACTION, EXITING ...");
+			System.exit(1);
+		}
+		stt.execute();
+		stt.close();
 	}
 	
 	public boolean depositDriver(int depositAmount) throws SQLException {
@@ -16,12 +65,12 @@ public class Account {
 			           " WHERE acno = " + accountNo;
 		PreparedStatement stt = conn.prepareStatement(query);
 		boolean confirm = false;
-		stt.execute();
 		int updatedRows = stt.executeUpdate();
 		if (updatedRows > 0) {
 			confirm = true;
 		}
 		stt.close();
+		transactionsUpdate(depositAmount, 0, getBalance());
 		return confirm;
 	}
 	
@@ -48,6 +97,7 @@ public class Account {
 		}
 		result.close();
 		stt_1.close();
+		transactionsUpdate(0, withdrawAmount, getBalance());
 		return confirm;
 	}
 	
@@ -77,25 +127,26 @@ public class Account {
 		return confirm;		
 	}
 	
-	private Date getDate() {
-		Date date = null;
-		return date;
+	public ResultSet accountTransactions() throws SQLException {
+		ResultSet resultSet = null;
+		PreparedStatement stt = null;
+		String query = "SELECT * FROM `transactions` WHERE acno = " + accountNo;
+		stt = conn.prepareStatement(query);
+		resultSet = stt.executeQuery();
+		return resultSet;
+	}
+		
+	public ResultSet todayTransactions() throws SQLException {
+		ResultSet resultSet = null;
+		PreparedStatement stt = null;
+		String query = "SELECT * FROM `transactions` WHERE date = '" + java.sql.Date.valueOf(java.time.LocalDate.now()).toString() + "'";
+		stt = conn.prepareStatement(query);
+		resultSet = stt.executeQuery();
+		return resultSet;
 	}
 	
-	public ResultSet transactionsUpdate(int amountDeposited, int amountWithdrawn) {
-		String query = null;
-		if (amountDeposited > 0) {
-			query = "INSERT INTO `transactions`(`acno`, `date`, `amountDeposited`, `balance`) "
-					+ "VALUES (?,?,?,?)";
-		}else if (amountWithdrawn > 0) {
-			query = "INSERT INTO `transactions`(`acno`, `date`, `amountWithdrawn`, `balance`) "
-					+ "VALUES (?,?,?,?)";
-		}else {
-			System.out.println("# INVALID TRANSACTION, EXITING ...");
-			System.exit(1);
-		}
-		
-		ResultSet resultSet = null;
-		return resultSet;
+	public void closeConnection() throws SQLException {
+		conn.close();
+		Connector.closeConnection();
 	}
 }

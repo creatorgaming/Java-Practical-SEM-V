@@ -1,11 +1,12 @@
 package dev.project.bankingOperation;
 
-import java.sql.SQLException; 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class Admin {
 	
-	public Admin() throws SQLException {
+	public Admin() throws SQLException, InterruptedException {
 		adminMenu();
 	}
 	
@@ -48,6 +49,9 @@ public class Admin {
 			System.out.print("\t       !! Unable to create account , Please Try Again !!");
 			System.out.println("\n\t ------------------------------------------------------");
 		}
+		
+		account.closeConnection();
+		
 		try {
 			Thread.sleep(2000);
 			adminMenu();
@@ -58,26 +62,62 @@ public class Admin {
 //		System.out.println(autoGenerateAccountNo());	
 	}
 
-	private void viewTransactions() {
-		
+	private void viewTransactions() throws SQLException, InterruptedException {
+		Account account = new Account();
+		ResultSet transactions = account.todayTransactions();
+		int transactionNo = 1;
+		System.out.println("\n\n\n\n\n");
+		System.out.println("\t\t\t\t--------------------------------------------------");
+		System.out.println("\t\t\t\t           |||| DT-BANK | ADMIN ||||");
+		System.out.println("\t\t\t\t--------------------------------------------------");
+		System.out.println("\t\t\t\t      -----------------------------------");
+		System.out.println("\t\t\t\t  	    TRANSACTIONS - [" + java.time.LocalDate.now().toString() + "]");
+		System.out.println("\t\t\t\t      -----------------------------------");
+		System.out.println("");
+		System.out.println(" ******************************************************************************************************************************");
+		System.out.println("  SNO.     ACCOUNT NO.		  DATE			AMOUNT DEPOSITED		AMOUNT WITHDRAWN		BALANCE");
+		System.out.println(" ------------------------------------------------------------------------------------------------------------------------------");
+		while (transactions.next()) {
+			System.out.print("   " + transactionNo  + "\t     "
+							+ transactions.getInt("acno") + "		  "
+							+ transactions.getDate("date"));
+			if (transactions.getInt("amountDeposited") == 0) {
+				System.out.print("\t\t      ");				
+			}else {
+				System.out.print("\t\t      " + transactions.getInt("amountDeposited"));
+			}
+			
+			if (transactions.getInt("amountWithdrawn") == 0) {
+				System.out.print("\t\t\t\t      ");				
+			}else {
+				System.out.print("\t\t\t\t      " + transactions.getInt("amountWithdrawn"));
+			}
+			System.out.print( "\t\t\t" + transactions.getInt("balance"));
+			System.out.println("");
+			transactionNo++;
+		}
+				
+		transactions.close();
+		account.closeConnection();
+		Thread.sleep(5000);
 	}
 	
-	private void adminMenu() throws SQLException {
+	private void adminMenu() throws SQLException, InterruptedException {
 		@SuppressWarnings("resource")
 		Scanner inp = new Scanner(System.in);
 		mainWhileLoop:
 		while (true) {
 			System.out.println("\n\n\n");
-			System.out.println("\t\t--------------------------------------------------");
-			System.out.println("\t\t           |||| DT-BANK | ADMIN ||||");
-			System.out.println("\t\t--------------------------------------------------");
-			System.out.println("\t\t\t -----------------------");
-			System.out.println("\t\t\t    1. Add Account");
-			System.out.println("\t\t\t    2. View Today's Transactions");
-			System.out.println("\t\t\t    3. Return to main Screen");
-			System.out.println("\t\t\t    4. Exit");
-			System.out.println("\t\t\t -----------------------");
-			System.out.print("\t\t\tChoice --> ");
+			System.out.println("\t\t\t\t--------------------------------------------------");
+			System.out.println("\t\t\t\t           |||| DT-BANK | ADMIN ||||");
+			System.out.println("\t\t\t\t--------------------------------------------------");
+			System.out.println("\t\t\t\t\t ------------------------");
+			System.out.println("\t\t\t\t\t |   1. Add Account");
+			System.out.println("\t\t\t\t\t |   2. View Today's Transactions");
+			System.out.println("\t\t\t\t\t |   3. Return to main Screen");
+			System.out.println("\t\t\t\t\t |   4. Exit");
+			System.out.println("\t\t\t\t\t ------------------------");
+			System.out.print("\t\t\t\t\tChoice --> ");
 			int choice = inp.nextInt();
 			switch (choice) {
 			case 1:
@@ -89,6 +129,7 @@ public class Admin {
 			case 3:
 				break mainWhileLoop;
 			case 4:
+				
 				System.exit(1);
 				break;
 			default:

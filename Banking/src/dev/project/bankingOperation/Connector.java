@@ -20,7 +20,7 @@ public class Connector {
 		return conn;
 	}
 	
-	public void closeConnection() {
+	public static void closeConnection() {
 		try {
 			conn.close();
 		} catch (SQLException e) {

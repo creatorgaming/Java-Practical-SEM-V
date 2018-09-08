@@ -19,7 +19,7 @@ public class User {
 	private void deposit() throws SQLException {
 		@SuppressWarnings("resource")
 		Scanner inp = new Scanner(System.in);
-		System.out.println("\n\n\n\n\n");
+		System.out.println("\n\n\n\n\n\n\n");
 		System.out.println("\t--------------------------------------------------");
 		System.out.println("\t           |||| DT-BANK | USER - " + accountNo +" ||||");
 		System.out.println("\t--------------------------------------------------");
@@ -57,7 +57,7 @@ public class User {
 	private void withdraw() throws SQLException {
 		@SuppressWarnings("resource")
 		Scanner inp = new Scanner(System.in);
-		System.out.println("\n\n\n\n\n");
+		System.out.println("\n\n\n\n\n\n\n");
 		System.out.println("\t--------------------------------------------------");
 		System.out.println("\t           |||| DT-BANK | USER - " + accountNo +" ||||");
 		System.out.println("\t--------------------------------------------------");
@@ -118,8 +118,45 @@ public class User {
 		result.close();
 	}
 	
-	private void passbook() {
-		
+	private void passbook() throws SQLException {
+		ResultSet transactions = account.accountTransactions();
+		int transactionNo = 1;
+		System.out.println("\n\n\n\n\n");
+		System.out.println("\t\t--------------------------------------------------");
+		System.out.println("\t\t           |||| DT-BANK | USER - " + accountNo +" ||||");
+		System.out.println("\t\t--------------------------------------------------");
+		System.out.println("\t\t	  -----------------------");
+		System.out.println("\t\t  	   	 PASSBOOK   	     ");
+		System.out.println("\t\t	  -----------------------");
+		System.out.println("");
+		System.out.println(" ***************************************************************************************************************");
+		System.out.println("  SNO.		  DATE			AMOUNT DEPOSITED		AMOUNT WITHDRAWN		BALANCE");
+		System.out.println(" ---------------------------------------------------------------------------------------------------------------");
+		while (transactions.next()) {
+			System.out.print("  " + transactionNo + "		  " + transactions.getDate("date"));
+			if (transactions.getInt("amountDeposited") == 0) {
+				System.out.print("\t\t      ");				
+			}else {
+				System.out.print("\t\t      " + transactions.getInt("amountDeposited"));
+			}
+			
+			if (transactions.getInt("amountWithdrawn") == 0) {
+				System.out.print("\t\t\t\t      ");				
+			}else {
+				System.out.print("\t\t\t\t      " + transactions.getInt("amountWithdrawn"));
+			}
+			System.out.print( "\t\t\t" + transactions.getInt("balance"));
+			System.out.println("");
+			transactionNo++;
+		}
+		try {
+			Thread.sleep(5000);
+			userMenu();
+		} catch (InterruptedException e) {
+			System.out.print("# Thread Error : ");
+			e.printStackTrace();
+		}
+		transactions.close();
 	}
 	
 	private void userMenu() throws SQLException {
@@ -131,14 +168,14 @@ public class User {
 			System.out.println("\t\t--------------------------------------------------");
 			System.out.println("\t\t           |||| DT-BANK | USER - " + accountNo +" ||||");
 			System.out.println("\t\t--------------------------------------------------");
-			System.out.println("\t\t\t -----------------------");
-			System.out.println("\t\t\t    1. Deposit");
-			System.out.println("\t\t\t    2. Withdraw");
-			System.out.println("\t\t\t    3. View Account Details");
-			System.out.println("\t\t\t    4. View Passbook");
-			System.out.println("\t\t\t    5. Return to Main Screen");
-			System.out.println("\t\t\t    6. Exit");
-			System.out.println("\t\t\t -----------------------");
+			System.out.println("\t\t\t ------------------------");
+			System.out.println("\t\t\t |   1. Deposit");
+			System.out.println("\t\t\t |   2. Withdraw");
+			System.out.println("\t\t\t |   3. View Account Details");
+			System.out.println("\t\t\t |   4. View Passbook");
+			System.out.println("\t\t\t |   5. Return to Main Screen");
+			System.out.println("\t\t\t |   6. Exit");
+			System.out.println("\t\t\t ------------------------");
 			System.out.print("\t\t\tChoice --> ");
 			int choice = inp.nextInt();
 			switch (choice) {
@@ -157,6 +194,7 @@ public class User {
 			case 5:
 				break mainWhileLoop;
 			case 6:
+				account.closeConnection();
 				System.exit(1);
 				break;
 			default:
