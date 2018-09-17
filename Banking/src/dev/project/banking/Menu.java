@@ -33,7 +33,7 @@ public class Menu {
 	@SuppressWarnings("resource")
 	private void adminMenu() throws SQLException, InterruptedException {
 		Scanner inp = new Scanner(System.in);
-		System.out.println("\n\n\n");
+		System.out.println("\n\n\n\n\n");
 		System.out.println("\t\t---------------");
 		System.out.println("\t\t|||| ADMIN ||||");
 		System.out.println("\t\t---------------");
