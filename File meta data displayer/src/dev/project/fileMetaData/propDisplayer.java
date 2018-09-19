@@ -2,7 +2,6 @@ package dev.project.fileMetaData;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -18,6 +17,7 @@ public class propDisplayer {
 
 	void input() {
 		System.out.print("Enter the path of file : ");
+		@SuppressWarnings("resource")
 		Scanner input = new Scanner(System.in);
 		path = input.nextLine();
 		System.out.println("");
