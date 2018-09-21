@@ -1,0 +1,14 @@
+- MAIN MENU
+	1. Create 
+	2. Insert 
+	3. Structure 
+	4. Show
+
+	- Create
+		: Allow you to create new table with column specified by users
+	- Insert
+		: Insert value in any of the tables in Database
+	- Structure
+		: Show the structure of the selected table
+	- Show
+		: Show the data stored in table
