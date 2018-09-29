@@ -1,0 +1,13 @@
+body {
+	font-family: 'Roboto Mono', monospace;
+	background: #f74776;	
+}
+
+.center {
+    margin : 0 auto;
+    width  : 50%;
+}
+select {
+	font-family: cursive;
+	font-size: 15px;
+}

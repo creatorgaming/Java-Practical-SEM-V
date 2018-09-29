@@ -1,0 +1,9 @@
+127.0.0.1 - - [25/Sep/2018:11:59:59 +0530] "GET / HTTP/1.1" 404 1074
+127.0.0.1 - - [25/Sep/2018:12:00:35 +0530] "GET / HTTP/1.1" 404 1074
+0:0:0:0:0:0:0:1 - - [25/Sep/2018:12:00:37 +0530] "GET /SqlQueryRunner/MainMenu HTTP/1.1" 500 1397
+0:0:0:0:0:0:0:1 - - [25/Sep/2018:12:00:37 +0530] "GET /favicon.ico HTTP/1.1" 404 1085
+0:0:0:0:0:0:0:1 - - [25/Sep/2018:12:00:47 +0530] "GET /SqlQueryRunner/index.html HTTP/1.1" 200 792
+0:0:0:0:0:0:0:1 - - [25/Sep/2018:12:00:47 +0530] "GET /SqlQueryRunner/js/main.js HTTP/1.1" 200 24
+0:0:0:0:0:0:0:1 - - [25/Sep/2018:12:00:47 +0530] "GET /SqlQueryRunner/css/style.css HTTP/1.1" 200 210
+0:0:0:0:0:0:0:1 - - [25/Sep/2018:12:01:13 +0530] "GET /SqlQueryRunner/MainMenu?choice=insert&submit=Submit HTTP/1.1" 200 -
+0:0:0:0:0:0:0:1 - - [25/Sep/2018:12:01:16 +0530] "GET /SqlQueryRunner/index.html HTTP/1.1" 304 -
