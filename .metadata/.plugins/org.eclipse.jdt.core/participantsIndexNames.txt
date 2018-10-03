@@ -1,3 +1,0 @@
-INDEX VERSION 1.131
-C:\Users\The Creator\Documents\GitHub\Java-Practical-SEM-V\.metadata\.plugins\org.eclipse.jst.jsp.core\jspsearch\2303299617.index
-\SqlQueryRunner\src
