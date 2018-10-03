@@ -16,24 +16,24 @@ public class MainMenu extends HttpServlet {
 	
 	public void service(HttpServletRequest _request, HttpServletResponse _response) throws IOException, ServletException {
 		String optionSelected = _request.getParameter("choice");
-//		switch (optionSelected) {
-//		case "create":			
-//			break;
-//		case "insert":			
-//			break;
-//		case "structure":			
-//			break;
-//		case "show":			
-//			break;
-//		default:
-//			break;
-//		}
-		if (optionSelected.equals("create")) {
-			ServletContext sc = this.getServletContext();
-			RequestDispatcher rd = sc.getRequestDispatcher("/jsp/Create_Table.jsp");
-			rd.include(_request, _response);
+		switch (optionSelected) {
+			case "create":
+					getServletContext().getRequestDispatcher("/createTable.html").forward(_request, _response);
+					break;
+			case "insert":			
+				break;
+			case "structure":			
+					break;
+			case "show":			
+					break;
+			default:
+					break;
 		}
-//		PrintWriter writer =  _response.getWriter();
-//		writer.print(optionSelected);
+		PrintWriter writer =  _response.getWriter();
+		writer.print(optionSelected);
+	}
+	
+	private void createTable(HttpServletResponse _response) {
+	 
 	}
 }
