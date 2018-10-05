@@ -4,9 +4,8 @@ Hexa-Calculator/example_2
 /.recommenders/
 .metadata
 .recommenders
-
-/Banking/
-/ExpressionCalculator/
-/File meta data displayer/
-/Hexa-Calculator/
-/RMI_Chat/
+/Banking
+/ExpressionCalculator
+/File meta data displayer
+/Hexa-Calculator
+/RMI_Chat
