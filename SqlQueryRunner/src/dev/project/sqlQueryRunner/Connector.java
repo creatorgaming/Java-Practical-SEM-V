@@ -14,7 +14,7 @@ public class Connector {
 			conn = DriverManager.getConnection(url, user, password);
 			System.out.println("# Connection Created... Conn : " + conn);
 		} catch (Exception e) {
-			System.out.println("# Connection Error : ");
+			System.out.print("# Connection Error : ");
 			e.printStackTrace();
 		}
 		return conn;

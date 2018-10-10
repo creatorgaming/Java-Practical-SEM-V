@@ -3,13 +3,15 @@ package dev.project.sqlQueryRunner;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.sun.corba.se.spi.orbutil.fsm.Guard.Result;
+
+import java.sql.*;
 
 @WebServlet("/mainmenu")
 public class MainMenu extends HttpServlet {
@@ -20,8 +22,9 @@ public class MainMenu extends HttpServlet {
 			case "create":
 					getServletContext().getRequestDispatcher("/createTable.html").forward(_request, _response);
 					break;
-			case "insert":			
-				break;
+			case "insert":
+					insertRecord(_response);
+					break;
 			case "structure":			
 					break;
 			case "show":			
@@ -29,11 +32,47 @@ public class MainMenu extends HttpServlet {
 			default:
 					break;
 		}
-		PrintWriter writer =  _response.getWriter();
-		writer.print(optionSelected);
 	}
 	
-	private void createTable(HttpServletResponse _response) {
-	 
+	private void insertRecord(HttpServletResponse _response) throws IOException {
+		_response.setContentType("text/html");
+		Connection conn = Connector.createConnection();
+		String query = "SHOW TABLES";
+		PreparedStatement stt;
+		ResultSet result = null;
+		PrintWriter out = _response.getWriter();
+		
+		try {
+			stt = conn.prepareStatement(query);
+			result = stt.executeQuery();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	
+		
+		out.println("<html>");
+		out.println("<head>");
+		out.println("<title>");
+		out.print("JSP | Insert Entry");
+		out.println("</title>");
+		out.println("</head>");
+		out.println("</head>");
+		out.println("<body>");
+		out.println("<form action='InsertData' method='get'>");
+		out.println("<h1>Select Table</label><h1>");
+		out.println("<select name=\"choice\">");
+		try {
+			while (result.next()) {
+				String resultElement = result.getString("Tables_in_sqlqueryexecuter");
+				out.println("<option value=" + resultElement + ">" + resultElement + "</option>");
+				out.print("<br>");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		out.println("</submit>");
+		out.println("<input type='submit' id='submit'>");
+		out.println("</form>");
+		out.println("</body>");		
+		out.println("</html>");		
 	}
 }

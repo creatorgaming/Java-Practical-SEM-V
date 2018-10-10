@@ -25,6 +25,7 @@ public class TableEntries extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		colNo = Integer.parseInt(request.getParameter("cols"));
 		tableName = request.getParameter("tablename");
+		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 		sendPage(out);
 	}
@@ -32,10 +33,14 @@ public class TableEntries extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String tableNamePost = request.getParameter("tableName");
 		int columnNo = Integer.parseInt(request.getParameter("colno"));
+		response.setContentType("text/html");;
+		
 		ArrayList<String> colName = new ArrayList<String>();
 		ArrayList<String> colType = new ArrayList<String>();
 		ArrayList<String> colLength = new ArrayList<String>();
+		boolean execute = false;
 		PrintWriter out = response.getWriter();
+		
 		int i = 1;
 		while (i <= columnNo) {
 			colName.add(request.getParameter("col"+i));
@@ -43,29 +48,30 @@ public class TableEntries extends HttpServlet {
 			colLength.add(request.getParameter("length"+i));
 			i++;
 		}
+		
 		i = 0;
 		Connection conn = Connector.createConnection();
 		String query = "CREATE TABLE " + tableName + "(";
 		while (i < columnNo) {
-			query += colName.get(i) + colType.get(i) + "(" + colLength.get(i) + "),"; 
+			query += colName.get(i) + " " + colType.get(i) + "(" + colLength.get(i) + ")";
+			if (i != columnNo - 1)
+				query += ",";
 			i++;
 		}
 		query += ")";
+
 		PreparedStatement stt;
 		try {
 			stt = conn.prepareStatement(query);
-			boolean execute = stt.execute();
-			if(execute) {
-				System.out.println("TRUE");
-			}else {
-				System.out.println("FALSE");
-			}
+			execute = stt.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		getServletContext().getRequestDispatcher("/index.html").forward(request, response);
 	}
 	
 	private void sendPage(PrintWriter out) {
+		int i = 1;
 		out.println("<html>");
 		out.println("<head>");
 		out.println("<title>");
@@ -75,7 +81,6 @@ public class TableEntries extends HttpServlet {
 		out.println("</head>");
 		out.println("<body>");
 		out.println("<form action='tableEntries' method='get'>");
-		int i = 1;
 		out.println("<input type='hidden' name=\'colno\' value='" + colNo + "'>");		
 		out.println("<input type='hidden' name=\'tableName\' value='" + tableName + "'>");		
 		out.println("<label>Column Name &nbsp&nbsp&nbsp&nbsp Column Type &nbsp&nbsp&nbsp&nbsp Length </label><br>");
