@@ -19,9 +19,7 @@ public class TableEntries extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private int colNo = 0; 
 	private	String tableName = null; 
-    public TableEntries() {
-        super();
-    }
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		colNo = Integer.parseInt(request.getParameter("cols"));
 		tableName = request.getParameter("tablename");
@@ -31,15 +29,16 @@ public class TableEntries extends HttpServlet {
 	}
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String tableNamePost = request.getParameter("tableName");
+		String tableName = request.getParameter("tableName");
 		int columnNo = Integer.parseInt(request.getParameter("colno"));
 		response.setContentType("text/html");;
 		
 		ArrayList<String> colName = new ArrayList<String>();
 		ArrayList<String> colType = new ArrayList<String>();
 		ArrayList<String> colLength = new ArrayList<String>();
+		@SuppressWarnings("unused")
 		boolean execute = false;
-		PrintWriter out = response.getWriter();
+//		PrintWriter out = response.getWriter();
 		
 		int i = 1;
 		while (i <= columnNo) {
@@ -86,7 +85,11 @@ public class TableEntries extends HttpServlet {
 		out.println("<label>Column Name &nbsp&nbsp&nbsp&nbsp Column Type &nbsp&nbsp&nbsp&nbsp Length </label><br>");
 		while (i <= colNo) {
 			out.println("<input type='text' name=\'col" + i +"\'>");		
-			out.println("<input type='text' name=\'type" + i +"\'>");		
+			out.println("<select name=\'type" + i +"\'>");
+			out.println("<option value='varchar'>varchar</option>");
+			out.println("<option value='int'>int</option>");
+			out.println("<option value='date'>date</option>");
+			out.println("</select>");
 			out.println("<input type='number' name=\'length" + i +"\'>");		
 			out.print("<br>");
 			i++;
